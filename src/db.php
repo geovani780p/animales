@@ -21,10 +21,16 @@ class DB {
             }
         }
         
-        // URI de MongoDB - usar variable de entorno o valor por defecto
-        $uri = $env['MONGO_URI'] ?? 'mongodb://127.0.0.1:27017';
+        // Configuración de MongoDB - Edita estos valores si no usas archivo .env
+        // IMPORTANTE: Reemplaza con tu URI real de MongoDB Atlas
+        $uri = $env['MONGO_URI'] ?? 'mongodb+srv://usuario:password@cluster.mongodb.net/';
         $dbName = $env['MONGO_DB'] ?? 'escuela';
         $colName = $env['MONGO_COLLECTION'] ?? 'animales';
+        
+        // Si no tienes archivo .env, puedes descomentar y editar estas líneas:
+        // $uri = 'mongodb+srv://TU_USUARIO:TU_PASSWORD@TU_CLUSTER.mongodb.net/';
+        // $dbName = 'escuela';
+        // $colName = 'animales';
 
         try {
             $this->client = new Client($uri);
