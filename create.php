@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../src/db.php';
+require_once __DIR__ . '/src/db.php';
 include __DIR__ . '/_header.php';
 ?>
 <h1 class="h3">Nuevo animal</h1>
