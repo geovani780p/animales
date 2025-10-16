@@ -21,16 +21,38 @@ class DB {
             }
         }
         
-        // Configuración de MongoDB - Edita estos valores si no usas archivo .env
-        // IMPORTANTE: Reemplaza con tu URI real de MongoDB Atlas
-        $uri = $env['MONGO_URI'] ?? 'mongodb+srv://usuario:password@cluster.mongodb.net/';
+        // =====================================================
+        // CONFIGURACIÓN MONGODB ATLAS - EDITA AQUÍ TUS DATOS
+        // =====================================================
+        
+        // Opción 1: Usar archivo .env (recomendado)
+        $uri = $env['MONGO_URI'] ?? null;
         $dbName = $env['MONGO_DB'] ?? 'escuela';
         $colName = $env['MONGO_COLLECTION'] ?? 'animales';
         
-        // Si no tienes archivo .env, puedes descomentar y editar estas líneas:
-        // $uri = 'mongodb+srv://TU_USUARIO:TU_PASSWORD@TU_CLUSTER.mongodb.net/';
-        // $dbName = 'escuela';
-        // $colName = 'animales';
+        // Opción 2: Si no usas .env, descomenta y edita estas líneas con tus datos reales:
+        /*
+        $uri = 'mongodb+srv://TU_USUARIO:TU_PASSWORD@TU_CLUSTER.xxxxx.mongodb.net/';
+        $dbName = 'escuela';
+        $colName = 'animales';
+        */
+        
+        // Validar que se haya configurado una URI válida
+        if ($uri === null || $uri === 'mongodb+srv://usuario:password@cluster.mongodb.net/') {
+            die("
+            <div style='background: #fff3cd; color: #856404; padding: 20px; border: 1px solid #ffeaa7; border-radius: 5px; margin: 20px; font-family: Arial;'>
+                <h3>⚠️ Configuración requerida</h3>
+                <p><strong>Necesitas configurar tu URI de MongoDB Atlas.</strong></p>
+                <h4>Pasos:</h4>
+                <ol>
+                    <li>Ve a <a href='https://www.mongodb.com/atlas' target='_blank'>MongoDB Atlas</a></li>
+                    <li>Crea un cluster gratuito</li>
+                    <li>Obtén tu URI de conexión</li>
+                    <li>Edita el archivo <code>src/db.php</code> líneas 32-36</li>
+                </ol>
+            </div>
+            ");
+        }
 
         try {
             $this->client = new Client($uri);
