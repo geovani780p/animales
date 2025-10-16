@@ -20,13 +20,43 @@ class DB {
                 if ($k) $env[trim($k)] = trim($v);
             }
         }
+        
+        // URI de MongoDB - usar variable de entorno o valor por defecto
         $uri = $env['MONGO_URI'] ?? 'mongodb://127.0.0.1:27017';
         $dbName = $env['MONGO_DB'] ?? 'escuela';
         $colName = $env['MONGO_COLLECTION'] ?? 'animales';
 
-        $this->client = new Client($uri);
-        $this->db = $this->client->selectDatabase($dbName);
-        $this->col = $this->db->selectCollection($colName);
+        try {
+            $this->client = new Client($uri);
+            $this->db = $this->client->selectDatabase($dbName);
+            $this->col = $this->db->selectCollection($colName);
+            
+            // Probar la conexión
+            $this->client->selectServer();
+            
+        } catch (MongoDB\Driver\Exception\ConnectionTimeoutException $e) {
+            die("
+            <div style='background: #f8d7da; color: #721c24; padding: 20px; border: 1px solid #f5c6cb; border-radius: 5px; margin: 20px; font-family: Arial;'>
+                <h3>❌ Error de Conexión a MongoDB</h3>
+                <p><strong>No se pudo conectar a la base de datos MongoDB.</strong></p>
+                <p><strong>URI intentada:</strong> $uri</p>
+                <h4>Posibles soluciones:</h4>
+                <ol>
+                    <li><strong>Si usas MongoDB Atlas:</strong> Verifica que tu URI esté correcta en el archivo .env</li>
+                    <li><strong>Si usas MongoDB local:</strong> Asegúrate de que MongoDB esté ejecutándose en el servidor</li>
+                    <li><strong>Verifica la configuración de red:</strong> El servidor debe poder acceder a MongoDB</li>
+                </ol>
+                <p><strong>Error técnico:</strong> " . $e->getMessage() . "</p>
+            </div>
+            ");
+        } catch (Exception $e) {
+            die("
+            <div style='background: #f8d7da; color: #721c24; padding: 20px; border: 1px solid #f5c6cb; border-radius: 5px; margin: 20px; font-family: Arial;'>
+                <h3>❌ Error de Base de Datos</h3>
+                <p><strong>Error:</strong> " . $e->getMessage() . "</p>
+            </div>
+            ");
+        }
     }
 
     public static function oid(string $id): ObjectId {
