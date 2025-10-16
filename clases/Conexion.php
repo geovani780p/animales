@@ -6,7 +6,7 @@ class Conexion {
         try {
             $servidor = "localhost";
             $puerto = "27017";
-            $BD = "b221190107_crud";
+            $BD = "b221190097_crud";
             $usuario = "backend";
             $password = "backend2025";
             $cadenaConexion = "mongodb://$usuario:$password@$servidor:$puerto/$BD?authSource=admin";
